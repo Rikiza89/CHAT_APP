@@ -1,0 +1,30 @@
+Django==5.0
+djangorestframework==3.14.0
+djangorestframework-simplejwt==5.3.1
+django-cors-headers==4.3.1
+django-filter==23.5
+
+# Channels for WebSocket
+channels==4.0.0
+channels-redis==4.2.0
+daphne==4.1.0
+
+# Database
+psycopg2-binary==2.9.9
+
+# Celery for async tasks
+celery==5.3.4
+redis==5.0.1
+
+# Image processing
+Pillow==10.1.0
+
+# Environment variables
+python-decouple==3.8
+
+# Production server
+gunicorn==21.2.0
+
+# Testing
+pytest==7.4.3
+pytest-django==4.7.0

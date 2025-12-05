@@ -1,0 +1,100 @@
+<!-- templates/blog/post_detail.html -->
+{% extends 'base.html' %}
+
+{% block title %}{{ post.title }}{% endblock %}
+
+{% block content %}
+<div class="container" style="max-width: 800px; margin-top: 30px;">
+    <article style="background: white; padding: 40px; border-radius: 12px; 
+                    box-shadow: 0 2px 8px rgba(0,0,0,0.1); margin-bottom: 30px;">
+        <div style="display: flex; align-items: center; gap: 15px; margin-bottom: 30px;">
+            <div style="width: 50px; height: 50px; border-radius: 50%; background: #007bff; 
+                        color: white; display: flex; align-items: center; justify-content: center; 
+                        font-weight: bold; font-size: 1.5rem;">
+                {{ post.author.username|first|upper }}
+            </div>
+            <div>
+                <a href="{% url 'accounts:profile' post.author.id %}" 
+                   style="font-weight: 500; font-size: 1.1rem; color: #333; text-decoration: none;">
+                    {{ post.author.username }}
+                </a>
+                <div style="font-size: 0.9rem; color: #999;">
+                    {{ post.created_at|date:"M d, Y H:i" }}
+                </div>
+            </div>
+        </div>
+        
+        {% if post.title %}
+            <h1 style="margin-bottom: 20px;">{{ post.title }}</h1>
+        {% endif %}
+        
+        <div style="color: #333; line-height: 1.8; margin-bottom: 30px;">
+            {{ post.content|linebreaks }}
+        </div>
+        
+        {% if post.image %}
+            <img src="{{ post.image.url }}" alt="{{ post.title }}" 
+                 style="width: 100%; border-radius: 8px; margin-bottom: 30px;">
+        {% endif %}
+        
+        <div style="display: flex; gap: 30px; color: #666; padding-top: 20px; border-top: 1px solid #e0e0e0;">
+            <span>❤️ {{ post.like_count }} likes</span>
+            <span>💬 {{ comments.count }} comments</span>
+            <span>👁️ {{ post.view_count }} views</span>
+        </div>
+    </article>
+    
+    <!-- Comments Section -->
+    <div style="background: white; padding: 40px; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+        <h2 style="margin-bottom: 30px;">Comments</h2>
+        
+        {% if user.is_authenticated %}
+            <form method="post" style="margin-bottom: 30px;">
+                {% csrf_token %}
+                {{ form.content }}
+                <button type="submit" class="btn btn-primary" style="margin-top: 10px;">
+                    Post Comment
+                </button>
+            </form>
+        {% else %}
+            <p style="text-align: center; color: #666; padding: 20px; background: #f8f9fa; border-radius: 8px;">
+                <a href="{% url 'accounts:login' %}" style="color: #007bff;">Login</a> to comment
+            </p>
+        {% endif %}
+        
+        {% for comment in comments %}
+            <div style="padding: 20px; border-bottom: 1px solid #e0e0e0;">
+                <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 10px;">
+                    <div style="width: 32px; height: 32px; border-radius: 50%; background: #007bff; 
+                                color: white; display: flex; align-items: center; justify-content: center; 
+                                font-weight: bold; font-size: 0.9rem;">
+                        {{ comment.author.username|first|upper }}
+                    </div>
+                    <span style="font-weight: 500;">{{ comment.author.username }}</span>
+                    <span style="color: #999; font-size: 0.85rem;">{{ comment.created_at|date:"M d, H:i" }}</span>
+                </div>
+                <p style="color: #666; margin-left: 42px;">{{ comment.content }}</p>
+            </div>
+        {% empty %}
+            <p style="text-align: center; color: #666; padding: 30px;">No comments yet. Be the first!</p>
+        {% endfor %}
+    </div>
+</div>
+
+<style>
+    textarea {
+        width: 100%;
+        padding: 12px;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        font-size: 1rem;
+        font-family: inherit;
+        resize: vertical;
+        min-height: 100px;
+    }
+    textarea:focus {
+        outline: none;
+        border-color: #007bff;
+    }
+</style>
+{% endblock %}

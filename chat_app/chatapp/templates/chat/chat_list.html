@@ -1,0 +1,64 @@
+<!-- templates/chat/chat_list.html -->
+{% extends 'base.html' %}
+
+{% block title %}Chats{% endblock %}
+
+{% block content %}
+<div class="container" style="max-width: 900px; margin-top: 30px;">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px;">
+        <h1>Messages</h1>
+        <a href="{% url 'chat:create_chat' %}" class="btn btn-primary">New Chat</a>
+    </div>
+    
+    <div style="background: white; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); overflow: hidden;">
+        {% if rooms %}
+            {% for room in rooms %}
+                <a href="{% url 'chat:chat_room' room.id %}" 
+                   style="display: flex; align-items: center; padding: 20px; border-bottom: 1px solid #e0e0e0; 
+                          text-decoration: none; color: #333; transition: background 0.2s;">
+                    <div style="width: 50px; height: 50px; border-radius: 50%; background: #007bff; 
+                                color: white; display: flex; align-items: center; justify-content: center; 
+                                font-weight: bold; margin-right: 15px;">
+                        {% if room.room_type == 'direct' %}
+                            {% with room.members.all|first as other_user %}
+                                {{ other_user.username|first|upper }}
+                            {% endwith %}
+                        {% else %}
+                            G
+                        {% endif %}
+                    </div>
+                    
+                    <div style="flex: 1;">
+                        <div style="font-weight: 500; margin-bottom: 5px;">
+                            {% if room.room_type == 'direct' %}
+                                {% for member in room.members.all %}
+                                    {% if member != user %}{{ member.username }}{% endif %}
+                                {% endfor %}
+                            {% else %}
+                                {{ room.name }}
+                            {% endif %}
+                        </div>
+                        <div style="color: #666; font-size: 0.9rem;">
+                            {{ room.get_last_message.content|default:"No messages yet"|truncatewords:10 }}
+                        </div>
+                    </div>
+                    
+                    <div style="color: #999; font-size: 0.85rem;">
+                        {{ room.get_last_message.created_at|date:"H:i" }}
+                    </div>
+                </a>
+            {% endfor %}
+        {% else %}
+            <div style="padding: 60px 20px; text-align: center; color: #666;">
+                <p>No conversations yet. Start chatting!</p>
+            </div>
+        {% endif %}
+    </div>
+</div>
+
+<style>
+    a[href*="chat_room"]:hover {
+        background: #f8f9fa;
+    }
+</style>
+{% endblock %}

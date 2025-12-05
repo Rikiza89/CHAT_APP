@@ -1,0 +1,78 @@
+<!-- templates/blog/feed.html -->
+{% extends 'base.html' %}
+
+{% block title %}Feed{% endblock %}
+
+{% block content %}
+<div class="container" style="max-width: 800px; margin-top: 30px;">
+    <h1 style="margin-bottom: 30px;">Latest Posts</h1>
+    
+    {% for post in posts %}
+        <article style="background: white; padding: 30px; border-radius: 12px; 
+                        box-shadow: 0 2px 8px rgba(0,0,0,0.1); margin-bottom: 30px;">
+            <div style="display: flex; align-items: center; gap: 15px; margin-bottom: 20px;">
+                <div style="width: 40px; height: 40px; border-radius: 50%; background: #007bff; 
+                            color: white; display: flex; align-items: center; justify-content: center; 
+                            font-weight: bold;">
+                    {{ post.author.username|first|upper }}
+                </div>
+                <div>
+                    <a href="{% url 'accounts:profile' post.author.id %}" 
+                       style="font-weight: 500; color: #333; text-decoration: none;">
+                        {{ post.author.username }}
+                    </a>
+                    <div style="font-size: 0.85rem; color: #999;">
+                        {{ post.created_at|date:"M d, Y H:i" }}
+                    </div>
+                </div>
+            </div>
+            
+            {% if post.title %}
+                <h2 style="margin-bottom: 15px;">
+                    <a href="{% url 'blog:post_detail' post.slug %}" 
+                       style="color: #333; text-decoration: none;">
+                        {{ post.title }}
+                    </a>
+                </h2>
+            {% endif %}
+            
+            <p style="color: #666; line-height: 1.6; margin-bottom: 20px;">
+                {{ post.content|truncatewords:100 }}
+            </p>
+            
+            {% if post.image %}
+                <img src="{{ post.image.url }}" alt="{{ post.title }}" 
+                     style="width: 100%; border-radius: 8px; margin-bottom: 20px;">
+            {% endif %}
+            
+            <div style="display: flex; gap: 20px; color: #666; font-size: 0.9rem;">
+                <span>❤️ {{ post.like_count }} likes</span>
+                <span>💬 {{ post.comment_count }} comments</span>
+                <span>👁️ {{ post.view_count }} views</span>
+            </div>
+        </article>
+    {% empty %}
+        <div style="background: white; padding: 60px; border-radius: 12px; 
+                    box-shadow: 0 2px 8px rgba(0,0,0,0.1); text-align: center;">
+            <p style="color: #666;">No posts yet. Be the first to create one!</p>
+        </div>
+    {% endfor %}
+    
+    <!-- Pagination -->
+    {% if posts.has_other_pages %}
+        <div style="display: flex; justify-content: center; gap: 10px; margin-top: 30px;">
+            {% if posts.has_previous %}
+                <a href="?page={{ posts.previous_page_number }}" class="btn btn-outline">Previous</a>
+            {% endif %}
+            
+            <span style="display: flex; align-items: center; padding: 0 15px;">
+                Page {{ posts.number }} of {{ posts.paginator.num_pages }}
+            </span>
+            
+            {% if posts.has_next %}
+                <a href="?page={{ posts.next_page_number }}" class="btn btn-outline">Next</a>
+            {% endif %}
+        </div>
+    {% endif %}
+</div>
+{% endblock %}
