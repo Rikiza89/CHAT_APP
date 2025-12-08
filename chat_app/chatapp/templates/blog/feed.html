@@ -45,11 +45,20 @@
                      style="width: 100%; border-radius: 8px; margin-bottom: 20px;">
             {% endif %}
             
-            <div style="display: flex; gap: 20px; color: #666; font-size: 0.9rem;">
-                <span>❤️ {{ post.like_count }} likes</span>
-                <span>💬 {{ post.comment_count }} comments</span>
-                <span>👁️ {{ post.view_count }} views</span>
-            </div>
+<div style="display: flex; gap: 20px; color: #666; font-size: 0.9rem; align-items: center;">
+    {% if user.is_authenticated %}
+        <form method="post" action="{% url 'blog:like_post' post.slug %}" style="display: inline;">
+            {% csrf_token %}
+            <button type="submit" style="background: none; border: none; cursor: pointer; color: #666; font-size: 0.9rem;">
+                ❤️ {{ post.like_count }} likes
+            </button>
+        </form>
+    {% else %}
+        <span>❤️ {{ post.like_count }} likes</span>
+    {% endif %}
+    <span>💬 {{ post.comment_count }} comments</span>
+    <span>👁️ {{ post.view_count }} views</span>
+</div>
         </article>
     {% empty %}
         <div style="background: white; padding: 60px; border-radius: 12px; 
@@ -75,4 +84,5 @@
         </div>
     {% endif %}
 </div>
+
 {% endblock %}
