@@ -2,7 +2,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator
-from .models import Post, Comment
+from .models import Post, Comment, PostLike
 from .forms import PostForm, CommentForm
 from apps.accounts.models import User
 
@@ -39,7 +39,18 @@ def post_detail(request, slug):
         'form': form
     })
 
+@login_required
+def like_post(request, slug):
+    post = get_object_or_404(Post, slug=slug)
+    PostLike.objects.get_or_create(post=post, user=request.user)
+    return redirect('blog:feed')
 
+@login_required
+def unlike_post(request, slug):
+    post = get_object_or_404(Post, slug=slug)
+    PostLike.objects.filter(post=post, user=request.user).delete()
+    return redirect('blog:feed')
+    
 @login_required
 def create_post(request):
     if request.method == 'POST':
@@ -60,4 +71,5 @@ def user_posts(request, user_id):
     paginator = Paginator(posts, 10)
     page = request.GET.get('page')
     posts = paginator.get_page(page)
+
     return render(request, 'blog/user_posts.html', {'profile_user': user, 'posts': posts})
