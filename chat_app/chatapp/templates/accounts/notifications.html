@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+
+{% block title %}Notifications{% endblock %}
+
+{% block content %}
+<div class="container" style="max-width: 800px; margin-top: 30px;">
+    <h1 style="margin-bottom: 30px;">Notifications</h1>
+    
+    <div style="background: white; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+        {% for notif in notifications %}
+            <a href="{{ notif.link }}" style="display: block; padding: 20px; border-bottom: 1px solid #e0e0e0; 
+                                              text-decoration: none; color: #333; 
+                                              {% if not notif.is_read %}background: #f0f8ff;{% endif %}">
+                <div style="display: flex; align-items: center; gap: 15px;">
+                    <div style="width: 40px; height: 40px; border-radius: 50%; background: #007bff; 
+                                color: white; display: flex; align-items: center; justify-content: center; 
+                                font-weight: bold;">
+                        {% if notif.sender %}{{ notif.sender.username|first|upper }}{% else %}?{% endif %}
+                    </div>
+                    <div style="flex: 1;">
+                        <div style="font-weight: 500;">{{ notif.message }}</div>
+                        <div style="font-size: 0.85rem; color: #999;">{{ notif.created_at|timesince }} ago</div>
+                    </div>
+                    <div style="font-size: 1.5rem;">
+                        {% if notif.notification_type == 'message' %}💬
+                        {% elif notif.notification_type == 'comment' %}💭
+                        {% elif notif.notification_type == 'like' %}❤️
+                        {% elif notif.notification_type == 'view' %}👁️
+                        {% endif %}
+                    </div>
+                </div>
+            </a>
+        {% empty %}
+            <div style="padding: 60px 20px; text-align: center; color: #666;">
+                <p>No notifications yet.</p>
+            </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

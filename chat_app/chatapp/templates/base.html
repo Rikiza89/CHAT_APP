@@ -6,160 +6,310 @@
     <title>{% block title %}ChatApp{% endblock %}</title>
     {% load static %}
     
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-            background: #f8f9fa;
-            color: #333;
-        }
-        
-        .navbar {
-            background: white;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-            padding: 0 20px;
-            position: sticky;
-            top: 0;
-            z-index: 1000;
-        }
-        
+<style>
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+    
+    body {
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+        background: #f8f9fa;
+        color: #333;
+    }
+    
+    .navbar {
+        background: white;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        padding: 0 20px;
+        position: sticky;
+        top: 0;
+        z-index: 1000;
+    }
+    
+    .navbar-container {
+        max-width: 1400px;
+        margin: 0 auto;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        height: 60px;
+        gap: 20px;
+    }
+    
+    .navbar-brand {
+        font-size: 1.5rem;
+        font-weight: bold;
+        color: #007bff;
+        text-decoration: none;
+        white-space: nowrap;
+    }
+    
+    .navbar-menu {
+        display: flex;
+        gap: 20px;
+        align-items: center;
+        list-style: none;
+    }
+    
+    .navbar-menu a {
+        text-decoration: none;
+        color: #333;
+        font-weight: 500;
+        transition: color 0.3s;
+        white-space: nowrap;
+    }
+    
+    .navbar-menu a:hover {
+        color: #007bff;
+    }
+    
+    .user-menu {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+    }
+    
+    .user-avatar {
+        width: 36px;
+        height: 36px;
+        border-radius: 50%;
+        background: #007bff;
+        color: white;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: bold;
+        cursor: pointer;
+        text-decoration: none;
+    }
+    
+    .btn {
+        padding: 8px 16px;
+        border-radius: 6px;
+        text-decoration: none;
+        font-weight: 500;
+        transition: all 0.3s;
+        border: none;
+        cursor: pointer;
+        display: inline-block;
+        white-space: nowrap;
+    }
+    
+    .btn-primary {
+        background: #007bff;
+        color: white;
+    }
+    
+    .btn-primary:hover {
+        background: #0056b3;
+    }
+    
+    .btn-outline {
+        border: 2px solid #007bff;
+        color: #007bff;
+        background: transparent;
+    }
+    
+    .btn-outline:hover {
+        background: #007bff;
+        color: white;
+    }
+    
+    .container {
+        max-width: 1400px;
+        margin: 0 auto;
+        padding: 20px;
+    }
+    
+    .alert {
+        padding: 12px 20px;
+        border-radius: 6px;
+        margin-bottom: 20px;
+    }
+    
+    .alert-success {
+        background: #d4edda;
+        color: #155724;
+        border: 1px solid #c3e6cb;
+    }
+    
+    .alert-error {
+        background: #f8d7da;
+        color: #721c24;
+        border: 1px solid #f5c6cb;
+    }
+    
+    .alert-info {
+        background: #d1ecf1;
+        color: #0c5460;
+        border: 1px solid #bee5eb;
+    }
+    
+    footer {
+        background: white;
+        border-top: 1px solid #e0e0e0;
+        padding: 30px 20px;
+        margin-top: 50px;
+        text-align: center;
+        color: #666;
+    }
+    
+    /* Hamburger Menu */
+    .hamburger {
+        display: none;
+        flex-direction: column;
+        cursor: pointer;
+        padding: 5px;
+    }
+    
+    .hamburger span {
+        width: 25px;
+        height: 3px;
+        background: #333;
+        margin: 3px 0;
+        transition: 0.3s;
+    }
+    
+    /* Notification Badge */
+    .notif-bell {
+        position: relative;
+        text-decoration: none;
+        font-size: 1.5rem;
+    }
+    
+    .notif-badge {
+        position: absolute;
+        top: -5px;
+        right: -5px;
+        background: red;
+        color: white;
+        border-radius: 50%;
+        width: 18px;
+        height: 18px;
+        font-size: 0.7rem;
+        text-align: center;
+        line-height: 18px;
+        display: none;
+    }
+    
+    .notif-badge.active {
+        display: block;
+    }
+    
+    /* Mobile Styles */
+    @media (max-width: 768px) {
         .navbar-container {
-            max-width: 1400px;
-            margin: 0 auto;
+            flex-wrap: wrap;
+            position: relative;
+        }
+        
+        .hamburger {
             display: flex;
-            justify-content: space-between;
-            align-items: center;
-            height: 60px;
+            order: 3;
         }
         
         .navbar-brand {
-            font-size: 1.5rem;
-            font-weight: bold;
-            color: #007bff;
-            text-decoration: none;
-        }
-        
-        .navbar-menu {
-            display: flex;
-            gap: 20px;
-            align-items: center;
-            list-style: none;
-        }
-        
-        .navbar-menu a {
-            text-decoration: none;
-            color: #333;
-            font-weight: 500;
-            transition: color 0.3s;
-        }
-        
-        .navbar-menu a:hover {
-            color: #007bff;
+            font-size: 1.2rem;
+            order: 1;
         }
         
         .user-menu {
-            display: flex;
-            align-items: center;
-            gap: 15px;
+            order: 2;
+            gap: 10px;
         }
         
-        .user-avatar {
-            width: 36px;
-            height: 36px;
-            border-radius: 50%;
-            background: #007bff;
-            color: white;
+        .navbar-menu {
+            display: none;
+            width: 100%;
+            flex-direction: column;
+            align-items: flex-start;
+            padding: 20px 0;
+            order: 4;
+            background: white;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            border-radius: 8px;
+            margin-top: 10px;
+        }
+        
+        .navbar-menu.active {
             display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: bold;
-            cursor: pointer;
+        }
+        
+        .navbar-menu li {
+            width: 100%;
+        }
+        
+        .navbar-menu a {
+            width: 100%;
+            padding: 12px 20px;
+            display: block;
+            border-radius: 6px;
+        }
+        
+        .navbar-menu a:hover {
+            background: #f8f9fa;
         }
         
         .btn {
-            padding: 8px 16px;
-            border-radius: 6px;
-            text-decoration: none;
-            font-weight: 500;
-            transition: all 0.3s;
-            border: none;
-            cursor: pointer;
-            display: inline-block;
+            padding: 6px 12px;
+            font-size: 0.9rem;
         }
         
-        .btn-primary {
-            background: #007bff;
-            color: white;
-        }
-        
-        .btn-primary:hover {
-            background: #0056b3;
-        }
-        
-        .btn-outline {
-            border: 2px solid #007bff;
-            color: #007bff;
-            background: transparent;
-        }
-        
-        .btn-outline:hover {
-            background: #007bff;
-            color: white;
+        .user-avatar {
+            width: 32px;
+            height: 32px;
+            font-size: 0.9rem;
         }
         
         .container {
-            max-width: 1400px;
-            margin: 0 auto;
-            padding: 20px;
+            padding: 15px;
         }
         
-        .alert {
-            padding: 12px 20px;
-            border-radius: 6px;
-            margin-bottom: 20px;
+        .notif-bell {
+            font-size: 1.3rem;
+        }
+    }
+    
+    @media (max-width: 480px) {
+        .navbar {
+            padding: 0 15px;
         }
         
-        .alert-success {
-            background: #d4edda;
-            color: #155724;
-            border: 1px solid #c3e6cb;
+        .navbar-brand {
+            font-size: 1rem;
         }
         
-        .alert-error {
-            background: #f8d7da;
-            color: #721c24;
-            border: 1px solid #f5c6cb;
+        .btn {
+            padding: 5px 10px;
+            font-size: 0.85rem;
         }
         
-        .alert-info {
-            background: #d1ecf1;
-            color: #0c5460;
-            border: 1px solid #bee5eb;
+        .user-menu {
+            gap: 8px;
         }
         
-        footer {
-            background: white;
-            border-top: 1px solid #e0e0e0;
-            padding: 30px 20px;
-            margin-top: 50px;
-            text-align: center;
-            color: #666;
+        .user-avatar {
+            width: 28px;
+            height: 28px;
+            font-size: 0.8rem;
         }
         
-        {% block extra_css %}{% endblock %}
-    </style>
+        .notif-bell {
+            font-size: 1.2rem;
+        }
+    }
+    
+    {% block extra_css %}{% endblock %}
+</style>
 </head>
 <body>
     <nav class="navbar">
         <div class="navbar-container">
             <a href="{% url 'blog:feed' %}" class="navbar-brand">💬 ChatApp</a>
             
-            <ul class="navbar-menu">
+            <ul class="navbar-menu" id="navMenu">
                 <li><a href="{% url 'blog:feed' %}">Feed</a></li>
                 <li><a href="{% url 'chat:chat_list' %}">Chats</a></li>
                 {% if user.is_authenticated %}
@@ -169,19 +319,27 @@
             
             <div class="user-menu">
                 {% if user.is_authenticated %}
+                    <a href="{% url 'accounts:notifications' %}" class="notif-bell">
+                        🔔
+                        <span id="notif-badge" class="notif-badge">0</span>
+                    </a>
                     <a href="{% url 'accounts:profile' user.id %}" class="user-avatar">
                         {{ user.username|first|upper }}
                     </a>
                     <form method="post" action="{% url 'accounts:logout' %}" style="display:inline;">
-    {% csrf_token %}
-    <button type="submit" class="btn btn-outline" style="background:none;border:2px solid #007bff;">
-        Logout
-    </button>
-</form>
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-outline">Logout</button>
+                    </form>
                 {% else %}
                     <a href="{% url 'accounts:login' %}" class="btn btn-outline">Login</a>
                     <a href="{% url 'accounts:register' %}" class="btn btn-primary">Sign Up</a>
                 {% endif %}
+            </div>
+            
+            <div class="hamburger" onclick="toggleMenu()">
+                <span></span>
+                <span></span>
+                <span></span>
             </div>
         </div>
     </nav>
@@ -203,7 +361,37 @@
     <footer>
         <p>&copy; 2024 ChatApp. All rights reserved.</p>
         <p>Built with Django, Channels, and WebSocket</p>
+        {% if user.is_authenticated %}
+        <p><a href="{% url 'accounts:notification_settings' %}" style="color: #007bff; text-decoration: none;">⚙️ Notification Settings</a></p>
+        {% endif %}
     </footer>
+    
+    <script>
+        function toggleMenu() {
+            const menu = document.getElementById('navMenu');
+            menu.classList.toggle('active');
+        }
+        
+        {% if user.is_authenticated %}
+        function updateNotificationCount() {
+            fetch('/accounts/notifications/count/')
+                .then(res => res.json())
+                .then(data => {
+                    const badge = document.getElementById('notif-badge');
+                    if (data.count > 0) {
+                        badge.textContent = data.count;
+                        badge.classList.add('active');
+                    } else {
+                        badge.classList.remove('active');
+                    }
+                });
+        }
+        
+        // Check every 30 seconds
+        setInterval(updateNotificationCount, 5000);
+        updateNotificationCount();
+        {% endif %}
+    </script>
     
     {% block extra_js %}{% endblock %}
 </body>

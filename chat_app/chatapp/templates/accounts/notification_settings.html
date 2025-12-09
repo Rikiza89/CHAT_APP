@@ -1,0 +1,79 @@
+{% extends 'base.html' %}
+
+{% block title %}Notification Settings{% endblock %}
+
+{% block content %}
+<div class="container" style="max-width: 600px; margin-top: 30px;">
+    <h1 style="margin-bottom: 30px;">Notification Settings</h1>
+    
+    <div style="background: white; padding: 40px; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+        <form method="post">
+            {% csrf_token %}
+            
+            <div style="margin-bottom: 25px;">
+                <label style="display: flex; align-items: center; cursor: pointer; padding: 15px; 
+                              border-radius: 8px; transition: background 0.2s;" 
+                       onmouseover="this.style.background='#f8f9fa'" 
+                       onmouseout="this.style.background='white'">
+                    <input type="checkbox" name="notify_messages" 
+                           {% if profile.notify_messages %}checked{% endif %}
+                           style="width: 20px; height: 20px; margin-right: 15px; cursor: pointer;">
+                    <div style="flex: 1;">
+                        <div style="font-weight: 500; font-size: 1rem;">💬 New Messages</div>
+                        <div style="color: #666; font-size: 0.9rem;">Get notified when someone sends you a message</div>
+                    </div>
+                </label>
+            </div>
+            
+            <div style="margin-bottom: 25px;">
+                <label style="display: flex; align-items: center; cursor: pointer; padding: 15px; 
+                              border-radius: 8px; transition: background 0.2s;" 
+                       onmouseover="this.style.background='#f8f9fa'" 
+                       onmouseout="this.style.background='white'">
+                    <input type="checkbox" name="notify_comments" 
+                           {% if profile.notify_comments %}checked{% endif %}
+                           style="width: 20px; height: 20px; margin-right: 15px; cursor: pointer;">
+                    <div style="flex: 1;">
+                        <div style="font-weight: 500; font-size: 1rem;">💭 Comments</div>
+                        <div style="color: #666; font-size: 0.9rem;">Get notified when someone comments on your post</div>
+                    </div>
+                </label>
+            </div>
+            
+            <div style="margin-bottom: 25px;">
+                <label style="display: flex; align-items: center; cursor: pointer; padding: 15px; 
+                              border-radius: 8px; transition: background 0.2s;" 
+                       onmouseover="this.style.background='#f8f9fa'" 
+                       onmouseout="this.style.background='white'">
+                    <input type="checkbox" name="notify_likes" 
+                           {% if profile.notify_likes %}checked{% endif %}
+                           style="width: 20px; height: 20px; margin-right: 15px; cursor: pointer;">
+                    <div style="flex: 1;">
+                        <div style="font-weight: 500; font-size: 1rem;">❤️ Likes</div>
+                        <div style="color: #666; font-size: 0.9rem;">Get notified when someone likes your post</div>
+                    </div>
+                </label>
+            </div>
+            
+            <div style="margin-bottom: 25px;">
+                <label style="display: flex; align-items: center; cursor: pointer; padding: 15px; 
+                              border-radius: 8px; transition: background 0.2s;" 
+                       onmouseover="this.style.background='#f8f9fa'" 
+                       onmouseout="this.style.background='white'">
+                    <input type="checkbox" name="notify_views" 
+                           {% if profile.notify_views %}checked{% endif %}
+                           style="width: 20px; height: 20px; margin-right: 15px; cursor: pointer;">
+                    <div style="flex: 1;">
+                        <div style="font-weight: 500; font-size: 1rem;">👁️ Profile Views</div>
+                        <div style="color: #666; font-size: 0.9rem;">Get notified when someone views your profile</div>
+                    </div>
+                </label>
+            </div>
+            
+            <button type="submit" class="btn btn-primary" style="width: 100%; padding: 12px; font-size: 1rem;">
+                Save Settings
+            </button>
+        </form>
+    </div>
+</div>
+{% endblock %}
