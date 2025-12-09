@@ -11,4 +11,7 @@ urlpatterns = [
     path('logout/', auth_views.LogoutView.as_view(next_page='/accounts/login'), name='logout'),
     path('profile/<uuid:user_id>/', views.profile, name='profile'),
     path('profile/edit/', views.edit_profile, name='edit_profile'),
+    path('notifications/', views.notifications, name='notifications'),
+    path('notifications/count/', views.notification_count, name='notification_count'),
+    path('notifications/settings/', views.notification_settings, name='notification_settings'),
 ]
