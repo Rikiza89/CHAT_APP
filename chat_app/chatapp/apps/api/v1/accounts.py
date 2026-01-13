@@ -29,25 +29,47 @@ class AuthViewSet(viewsets.GenericViewSet):
                 'access': str(refresh.access_token),
             }
         }, status=status.HTTP_201_CREATED)
-    
+        
     @action(detail=False, methods=['post'])
     def login(self, request):
         from django.contrib.auth import authenticate
         
-        email = request.data.get('email')
+        # Get identifier (Flet sends it as 'username')
+        identifier = request.data.get('username') or request.data.get('email')
         password = request.data.get('password')
         
-        user = authenticate(username=email, password=password)
+        # authenticate usually expects the 'username' keyword 
+        # even if that field contains an email address
+        user = authenticate(username=identifier, password=password)
+        
         if user:
             refresh = RefreshToken.for_user(user)
             return Response({
                 'user': UserSerializer(user).data,
-                'tokens': {
-                    'refresh': str(refresh),
-                    'access': str(refresh.access_token),
-                }
+                'access_token': str(refresh.access_token), # Flatter for easier Flet access
+                'refresh': str(refresh),
             })
         return Response({'error': 'Invalid credentials'}, status=status.HTTP_401_UNAUTHORIZED)
+
+
+    # @action(detail=False, methods=['post'])
+    # def login(self, request):
+    #     from django.contrib.auth import authenticate
+        
+    #     email = request.data.get('email')
+    #     password = request.data.get('password')
+        
+    #     user = authenticate(username=email, password=password)
+    #     if user:
+    #         refresh = RefreshToken.for_user(user)
+    #         return Response({
+    #             'user': UserSerializer(user).data,
+    #             'tokens': {
+    #                 'refresh': str(refresh),
+    #                 'access': str(refresh.access_token),
+    #             }
+    #         })
+    #     return Response({'error': 'Invalid credentials'}, status=status.HTTP_401_UNAUTHORIZED)
 
 
 class UserViewSet(viewsets.ModelViewSet):
